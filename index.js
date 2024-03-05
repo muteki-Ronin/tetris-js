@@ -1,4 +1,4 @@
-const SIZE_BLOCK = 30;
+const SIZE_BLOCK = 25;
 
 // ----------
 
@@ -20,32 +20,44 @@ const game = {
     ["o", "o", "o", "o", "o", "o", "o", "o", "o", "o"],
     ["o", "o", "o", "o", "o", "o", "o", "o", "o", "o"],
     ["o", "o", "o", "o", "o", "o", "o", "o", "o", "o"],
-    ["o", "o", "o", "o", "o", "o", "o", "o", "o", "o"],
     ["o", "o", "o", "o", "o", "o", "o", "o", "o", "x"],
-    ["o", "o", "o", "o", "x", "x", "o", "o", "o", "x"],
-    ["o", "o", "o", "o", "x", "x", "o", "o", "x", "x"],
+    ["o", "o", "o", "o", "o", "o", "o", "o", "o", "x"],
+    ["x", "x", "x", "o", "o", "x", "o", "o", "o", "x"],
+    ["x", "x", "x", "o", "x", "x", "x", "o", "o", "x"],
   ],
 
   activeTetromino: {
     x: 3,
     y: 0,
     block: [
-      ["o", "x", "o"],
-      ["o", "x", "o"],
+      ["o", "o", "o"],
+      ["o", "x", "x"],
       ["x", "x", "o"],
     ],
   },
 
   moveLeft() {
-    this.activeTetromino.x -= 1;
+    if (
+      this.checkOutPosition(this.activeTetromino.x - 1, this.activeTetromino.y)
+    ) {
+      this.activeTetromino.x -= 1;
+    }
   },
 
   moveRight() {
-    this.activeTetromino.x += 1;
+    if (
+      this.checkOutPosition(this.activeTetromino.x + 1, this.activeTetromino.y)
+    ) {
+      this.activeTetromino.x += 1;
+    }
   },
 
   moveDown() {
-    this.activeTetromino.y += 1;
+    if (
+      this.checkOutPosition(this.activeTetromino.x, this.activeTetromino.y + 1)
+    ) {
+      this.activeTetromino.y += 1;
+    }
   },
 
   rotateTetromino() {},
@@ -64,6 +76,24 @@ const game = {
     }
     return area;
   },
+
+  checkOutPosition(x, y) {
+    const tetromino = this.activeTetromino.block;
+
+    for (let i = 0; i < tetromino.length; i++) {
+      for (let j = 0; j < tetromino[i].length; j++) {
+        if (tetromino[i][j] === "o") continue;
+        if (
+          !this.area[y + i][x + j] ||
+          !this.area[y + i][x + j] ||
+          this.area[y + i][x + j] === "x"
+        ) {
+          return false;
+        }
+      }
+    }
+    return true;
+  },
 };
 
 // Rendering
@@ -78,6 +108,8 @@ container.append(canvas);
 const context = canvas.getContext("2d");
 
 const showArea = (area) => {
+  context.clearRect(0, 0, canvas.width, canvas.height);
+
   for (let y = 0; y < area.length; y++) {
     const line = area[y];
     for (let x = 0; x < line.length; x++) {
@@ -101,5 +133,28 @@ const showArea = (area) => {
     }
   }
 };
+
+window.addEventListener("keydown", (e) => {
+  const key = e.code;
+
+  switch (key) {
+    case "ArrowLeft":
+      game.moveLeft();
+      showArea(game.viewArea);
+      break;
+    case "ArrowRight":
+      game.moveRight();
+      showArea(game.viewArea);
+      break;
+    case "ArrowDown":
+      game.moveDown();
+      showArea(game.viewArea);
+      break;
+    case "ArrowUp":
+      game.rotateTetromino();
+      showArea(game.viewArea);
+      break;
+  }
+});
 
 showArea(game.viewArea);

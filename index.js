@@ -3,11 +3,20 @@ import { Game } from "./modules/game.js";
 const game = new Game();
 
 const SIZE_BLOCK = 25;
-const COLUMNS = 10;
-const ROWS = 20;
+export const COLUMNS = 10;
+export const ROWS = 20;
 
 // Rendering
 const container = document.querySelector(".container");
+const colors = {
+  J: "FireBrick",
+  I: "CadetBlue",
+  O: "Gold",
+  L: "SlateBlue",
+  2: "RoyalBlue",
+  T: "Indigo",
+  S: "MediumSeaGreen",
+};
 
 const canvas = document.createElement("canvas");
 canvas.classList.add("game-area");
@@ -22,10 +31,11 @@ const showArea = (area) => {
 
   for (let y = 0; y < area.length; y++) {
     const line = area[y];
+
     for (let x = 0; x < line.length; x++) {
       const block = line[x];
       if (block !== "o") {
-        context.fillStyle = "tomato";
+        context.fillStyle = colors[block];
         context.strokeStyle = "white";
         context.fillRect(
           x * SIZE_BLOCK,

@@ -1,4 +1,5 @@
 import { tetrominoes } from "./tetrominoes.js";
+import { ROWS, COLUMNS } from "../index.js";
 
 export class Game {
   area = [
@@ -18,10 +19,10 @@ export class Game {
     ["o", "o", "o", "o", "o", "o", "o", "o", "o", "o"],
     ["o", "o", "o", "o", "o", "o", "o", "o", "o", "o"],
     ["o", "o", "o", "o", "o", "o", "o", "o", "o", "o"],
-    ["o", "o", "o", "o", "o", "o", "o", "o", "o", "x"],
-    ["o", "o", "o", "o", "o", "o", "o", "o", "o", "x"],
-    ["x", "x", "x", "o", "o", "x", "o", "o", "o", "x"],
-    ["x", "x", "x", "o", "x", "x", "x", "o", "o", "x"],
+    ["o", "o", "o", "o", "o", "o", "o", "o", "o", "o"],
+    ["o", "o", "o", "o", "o", "o", "o", "o", "o", "o"],
+    ["o", "o", "o", "o", "o", "o", "o", "o", "o", "o"],
+    ["o", "o", "o", "o", "o", "o", "o", "o", "o", "o"],
   ];
 
   activeTetromino = this.createTetromino();
@@ -142,5 +143,30 @@ export class Game {
     }
 
     this.changeTetromino();
+    this.clearRow();
+  }
+
+  clearRow() {
+    const rows = [];
+
+    for (let i = ROWS - 1; i >= 0; i--) {
+      let countBlock = 0;
+
+      for (let j = 0; j < COLUMNS; j++) {
+        if (this.area[i][j] !== "o") {
+          countBlock += 1;
+        }
+      }
+
+      if (!countBlock) break;
+      if (countBlock === COLUMNS) {
+        rows.unshift(i);
+      }
+    }
+
+    rows.forEach((item) => {
+      this.area.splice(item, 1);
+      this.area.unshift(Array(COLUMNS).fill("o"));
+    });
   }
 }

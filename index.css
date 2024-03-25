@@ -11,10 +11,42 @@ body {
 .container {
   width: 500px;
   margin: 0 auto;
+  display: grid;
+  gap: 50px;
+  align-items: flex-start;
+  grid-template-areas: 
+  "score game"
+  "next game";
 }
 
 .game-area {
   border: solid black;
   border-width: 0 2px 3px 2px;
   display: block;
+  grid-area: game;
+}
+
+.preview {
+  border: 3px solid black;
+  font-size: 18px;
+  text-align: center;
+  padding: 50px;
+  grid-column: 1 / 3;
+}
+
+.scoreBlock {
+  border: 2px solid black;
+  font-size: 18px;
+  text-align: center;
+  padding: 20px;
+  grid-area: score;
+}
+
+.nextTetrominoBlock {
+  border: 2px solid black;
+  padding: 10px;
+  grid-area: next;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }

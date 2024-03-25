@@ -2,6 +2,13 @@ import { tetrominoes } from "./tetrominoes.js";
 import { ROWS, COLUMNS } from "../index.js";
 
 export class Game {
+  score = 0;
+  lines = 0;
+  level = 1;
+  record = localStorage.getItem("teris-record") || 0;
+  points = [0, 100, 300, 700, 1500];
+  gameOver = false;
+
   area = [
     ["o", "o", "o", "o", "o", "o", "o", "o", "o", "o"],
     ["o", "o", "o", "o", "o", "o", "o", "o", "o", "o"],
@@ -66,6 +73,8 @@ export class Game {
   }
 
   moveDown() {
+    if (this.gameOver) return;
+
     if (
       this.checkOutPosition(this.activeTetromino.x, this.activeTetromino.y + 1)
     ) {
@@ -144,6 +153,12 @@ export class Game {
 
     this.changeTetromino();
     this.clearRow();
+    this.updatePanels();
+
+    this.gameOver = !this.checkOutPosition(
+      this.activeTetromino.x,
+      this.activeTetromino.y
+    );
   }
 
   clearRow() {
@@ -168,5 +183,15 @@ export class Game {
       this.area.splice(item, 1);
       this.area.unshift(Array(COLUMNS).fill("o"));
     });
+  }
+
+  createUpdatePanels(showScore, showNextTetromino) {
+    showScore(this.lines, this.score, this.level, this.record);
+    showNextTetromino(this.activeTetromino.block);
+
+    this.updatePanels = () => {
+      showScore(this.lines, this.score, this.level, this.record);
+      showNextTetromino(this.activeTetromino.block);
+    };
   }
 }

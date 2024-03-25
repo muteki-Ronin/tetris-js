@@ -17,18 +17,16 @@ export class View {
   };
 
   canvas = document.createElement("canvas");
-  context = this.canvas.getContext("2d");
 
   preview() {
-    const title = document.createElement("h1");
-    title.classList.add("preview");
-    title.textContent = "Press ENTER to START!";
-    this.container.append(title);
+    const preview = document.createElement("h1");
+    preview.textContent = "Press ENTER to START!";
+    preview.classList.add("preview");
+    this.container.append(preview);
   }
 
   init() {
-    const title = document.querySelector(".preview");
-    title.remove();
+    document.querySelector(".preview").remove();
 
     this.canvas.classList.add("game-area");
     this.canvas.width = SIZE_BLOCK * COLUMNS;
@@ -36,8 +34,75 @@ export class View {
     this.container.append(this.canvas);
   }
 
+  createBlockScore() {
+    const scoreBlock = document.createElement("div");
+    scoreBlock.classList.add("scoreBlock");
+
+    const linesElem = document.createElement("p");
+    const scoreElem = document.createElement("p");
+    const levelElem = document.createElement("p");
+    const recordElem = document.createElement("p");
+
+    scoreBlock.append(linesElem, scoreElem, levelElem, recordElem);
+
+    this.container.append(scoreBlock);
+
+    return (lines, score, level, record) => {
+      linesElem.textContent = `Lines: ${lines}`;
+      scoreElem.textContent = `Score: ${score}`;
+      levelElem.textContent = `Level: ${level}`;
+      recordElem.textContent = `Record: ${record}`;
+    };
+  }
+
+  createBlockNextTetromino() {
+    const nextTetrominoBlock = document.createElement("div");
+    nextTetrominoBlock.classList.add("nextTetrominoBlock");
+    nextTetrominoBlock.style.cssText = `
+    width: ${SIZE_BLOCK * 4}px;
+    height: ${SIZE_BLOCK * 4}px;
+    `;
+
+    const canvas = document.createElement("canvas");
+    const context = canvas.getContext("2d");
+    nextTetrominoBlock.append(canvas);
+
+    this.container.append(nextTetrominoBlock);
+
+    return (tetromino) => {
+      canvas.width = SIZE_BLOCK * tetromino.length;
+      canvas.height = SIZE_BLOCK * tetromino.length;
+      context.clearRect(0, 0, canvas.width, canvas.height);
+
+      for (let y = 0; y < tetromino.length; y++) {
+        const line = tetromino[y];
+
+        for (let x = 0; x < line.length; x++) {
+          const block = line[x];
+          if (block !== "o") {
+            context.fillStyle = this.colors[block];
+            context.strokeStyle = "white";
+            context.fillRect(
+              x * SIZE_BLOCK,
+              y * SIZE_BLOCK,
+              SIZE_BLOCK,
+              SIZE_BLOCK
+            );
+            context.strokeRect(
+              x * SIZE_BLOCK,
+              y * SIZE_BLOCK,
+              SIZE_BLOCK,
+              SIZE_BLOCK
+            );
+          }
+        }
+      }
+    };
+  }
+
   showArea(area) {
-    this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
+    const context = this.canvas.getContext("2d");
+    context.clearRect(0, 0, this.canvas.width, this.canvas.height);
 
     for (let y = 0; y < area.length; y++) {
       const line = area[y];
@@ -45,15 +110,15 @@ export class View {
       for (let x = 0; x < line.length; x++) {
         const block = line[x];
         if (block !== "o") {
-          this.context.fillStyle = this.colors[block];
-          this.context.strokeStyle = "white";
-          this.context.fillRect(
+          context.fillStyle = this.colors[block];
+          context.strokeStyle = "white";
+          context.fillRect(
             x * SIZE_BLOCK,
             y * SIZE_BLOCK,
             SIZE_BLOCK,
             SIZE_BLOCK
           );
-          this.context.strokeRect(
+          context.strokeRect(
             x * SIZE_BLOCK,
             y * SIZE_BLOCK,
             SIZE_BLOCK,

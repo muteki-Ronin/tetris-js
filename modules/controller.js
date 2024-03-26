@@ -18,7 +18,7 @@ export class Controller {
 
     this.game.createUpdatePanels(
       this.view.createBlockScore(),
-      this.view.createBlockNextTetromino()
+      this.view.createBlockNextTetramino()
     );
 
     const tick = () => {
@@ -53,7 +53,7 @@ export class Controller {
           this.view.showArea(this.game.viewArea);
           break;
         case "ArrowUp":
-          this.game.rotateTetromino();
+          this.game.rotateTetramino();
           this.view.showArea(this.game.viewArea);
           break;
       }

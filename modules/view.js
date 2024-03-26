@@ -55,27 +55,27 @@ export class View {
     };
   }
 
-  createBlockNextTetromino() {
-    const nextTetrominoBlock = document.createElement("div");
-    nextTetrominoBlock.classList.add("nextTetrominoBlock");
-    nextTetrominoBlock.style.cssText = `
+  createBlockNextTetramino() {
+    const nextTetraminoBlock = document.createElement("div");
+    nextTetraminoBlock.classList.add("nextTetraminoBlock");
+    nextTetraminoBlock.style.cssText = `
     width: ${SIZE_BLOCK * 4}px;
     height: ${SIZE_BLOCK * 4}px;
     `;
 
     const canvas = document.createElement("canvas");
     const context = canvas.getContext("2d");
-    nextTetrominoBlock.append(canvas);
+    nextTetraminoBlock.append(canvas);
 
-    this.container.append(nextTetrominoBlock);
+    this.container.append(nextTetraminoBlock);
 
-    return (tetromino) => {
-      canvas.width = SIZE_BLOCK * tetromino.length;
-      canvas.height = SIZE_BLOCK * tetromino.length;
+    return (tetramino) => {
+      canvas.width = SIZE_BLOCK * tetramino.length;
+      canvas.height = SIZE_BLOCK * tetramino.length;
       context.clearRect(0, 0, canvas.width, canvas.height);
 
-      for (let y = 0; y < tetromino.length; y++) {
-        const line = tetromino[y];
+      for (let y = 0; y < tetramino.length; y++) {
+        const line = tetramino[y];
 
         for (let x = 0; x < line.length; x++) {
           const block = line[x];
